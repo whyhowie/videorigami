@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import * as THREE from 'three'
+import * as THREE from './three.module'
 import './App.css';
 
 
 
 function App() {
-  const videoRef = useRef();
-  const videoPath = process.env.PUBLIC_URL + "/assets/videos/catjam_blue.mp4"
 
+  const videoRef = useRef();
+  const videoPath = "/assets/videos/catjam_blue.mp4"
+
+  console.log(videoPath)
 
   const timeStamps = [...Array(12).keys()].map(x => x*0.5)
   const [progress, setProgress] = useState(0)
@@ -56,6 +58,10 @@ function App() {
     buttonRef.current.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
     buttonRef.current.classList.add('active')
   }
+
+
+
+
 
   useEffect(() => {
     let canvasElement = document.getElementById("test")
@@ -130,6 +136,10 @@ function App() {
   }, []
   )
 
+
+
+
+
   return (
     <div className="App">
       <p>VideOrigami</p>
@@ -139,6 +149,7 @@ function App() {
             type="video/mp4" />
         </video>
       </div>
+
       <div className="nav">
         {buttonElements}
       </div>
@@ -151,10 +162,10 @@ function App() {
       <div id="container">
         <canvas id="test"></canvas>
       </div>
-      
 
 
     </div>
+
 
   );
 }
