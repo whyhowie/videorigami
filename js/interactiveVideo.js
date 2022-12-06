@@ -65,3 +65,13 @@ function showProgress(event) {    // Scroll based on video progress
     progressElement.setAttribute("value", currentProgress)
     progressTextElement.innerText = `${currentProgress.toFixed(2)}%`
   }
+
+
+
+  function show2Dcanvas(checkbox) {
+    let canvas2dElement = document.getElementById("canvas2d")
+    // !checkbox.checked ? canvas2dElement.setAttribute("hidden",'') :
+    //   canvas2dElement.removeAttribute("hidden")
+    checkbox.checked ? canvas2dElement.classList.remove("collapse") :
+    canvas2dElement.classList.add("collapse")
+  }

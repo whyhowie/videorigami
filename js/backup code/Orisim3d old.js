@@ -17,18 +17,15 @@ function Orisim3d(model, view2d, view3d, command) {
 
 // Main startup
 
-var commandText = ''
+
 
 if (typeof window !== 'undefined') {
-  // Read tag and launch
-  commandText = document.getElementById("cocotte.txt").textContent;
-  
-  window.addEventListener("load", () => {initialize(commandText)} );
+  window.addEventListener("load", initialize );
 }
 
-var animReq
+let isRunning = false
 
-function initialize (cmdText) {
+function initialize () {
   window.removeEventListener( "load", initialize );
 
   // Create model, Command, then lookup view2d, view3d, textarea
@@ -43,20 +40,36 @@ function initialize (cmdText) {
   // Bind all in OriSim3d
   OrigamiDemo = new Orisim3d(model, view2d, view3d, command);
 
-  // Run commands
-  OrigamiDemo.command.command(cmdText);
-  
-  // Check settings:
-  OrigamiDemo.command.autoPause = document.getElementById('auto-pause').checked
+  // Read tag and launch
+  var tag = document.getElementById("cocotte.txt");
+  OrigamiDemo.command.command(tag.textContent);
 
   // Launch animation
-  animReq = requestAnimationFrame(loop);
+  requestAnimationFrame(loop);
 }
 
+function rebuild () { // Not sure if it works yet
+  var model = OrigamiDemo.model;
+  var command = OrigamiDemo.command;
+
+  var canvas2d     = window.document.getElementById('canvas2d');
+  var view2d       = canvas2d ? new View2d(model, canvas2d) : null;
+  var canvas3d     = window.document.getElementById('canvas3d');
+  var view3d       = canvas3d ? new View3d(model, canvas3d) : null;
+
+  OrigamiDemo = new Orisim3d(model, view2d, view3d, command);
+
+  // Launch animation
+  // console.log("iCmd from OrigamiDemo: " + OrigamiDemo.command.iCmd)
+  // console.log("currentCmd from OrigamiDemo: " + OrigamiDemo.command.currentCmd)
+  OrigamiDemo.model.change = true;
+  requestAnimationFrame(loop);
+}
 
 // Animation loop
 function loop() {
 
+  // console.log(OrigamiDemo.model)
   if (OrigamiDemo.model.change) {
     if (OrigamiDemo.view2d !== null) {
       OrigamiDemo.view2d.draw();
@@ -69,22 +82,8 @@ function loop() {
     OrigamiDemo.model.change = !!OrigamiDemo.command.anim()
   }
   OrigamiDemo.view3d.draw();
-  animReq = requestAnimationFrame(loop);
+  requestAnimationFrame(loop);
 }
-
-
-// Dynamic animation canvas
-window.addEventListener("resize", () => {
-  pauseAnim()
-  let containerElement = document.getElementById("canvas3d")
-  OrigamiDemo.view3d.rendererWidth = containerElement.clientWidth
-  // console.log(canvasElement.clientWidth)
-  let aspectRatio = containerElement.clientWidth / containerElement.clientHeight
-  OrigamiDemo.view3d.renderer.setSize(OrigamiDemo.view3d.rendererWidth, 
-    OrigamiDemo.view3d.rendererWidth / aspectRatio);
-  OrigamiDemo.view3d.camera.aspect = aspectRatio;
-  OrigamiDemo.view3d.camera.updateProjectionMatrix();
-});
 
 
 // Animation controls
@@ -92,27 +91,20 @@ window.restartAnim = restartAnim
 window.previousStep = previousStep
 window.pauseAnim = pauseAnim
 window.continueAnim = continueAnim
-window.fastForward = fastForward
-window.autoPause = autoPause
-
 
 function restartAnim () {
-  // cancelAnimationFrame(animReq)
-  // OrigamiDemo.command.state = State.idle
+  OrigamiDemo.command.state = State.idle
   console.log(OrigamiDemo.command.state)
-  initialize(commandText)
-
+  initialize()
 }
 
 
 function previousStep () {
-  cancelAnimationFrame(animReq);
   OrigamiDemo.command.command("u")
-  // OrigamiDemo.command.state = State.idle
   // rebuild()
-  
-  OrigamiDemo.model.change = true
-  OrigamiDemo.view3d.initBuffers();
+  // OrigamiDemo.view3d.draw()
+  console.log(OrigamiDemo.command.state)
+  // OrigamiDemo.model.change = true
 }
 
 
@@ -121,26 +113,14 @@ function previousStep () {
 function pauseAnim () { 
   OrigamiDemo.command.command("pa")
   console.log(OrigamiDemo.command.state)
+  // isRunning = false
 }
 
 // The continue behavior in Command.js needs to be fixed
 //  for now we only work on the animation loop
 function continueAnim () {
   OrigamiDemo.command.command("co")
-  OrigamiDemo.model.change = true 
   console.log(OrigamiDemo.command.state)
-}
-
-
-// Fast-forward (skipping animation)
-function fastForward () {
-  OrigamiDemo.command.command("ff")
-  console.log(OrigamiDemo.command.state)
-}
-
-// A checkbox handler for auto pausing at the end of commands
-function autoPause(checkbox) {
-  OrigamiDemo.command.autoPause = checkbox.checked
 }
 
 // Static values

@@ -12,33 +12,43 @@ function View3d(modele, canvas3dElt) {
   var canvas3d = canvas3dElt;
   var nbFacesVertice = 0;
 
-
   //  Three: initialisation
-  const renderer = new THREE.WebGLRenderer({ canvas: canvas3d });
-  let rendererWidth = canvas3d.clientWidth
-  let aspectRatio = canvas3d.clientWidth / canvas3d.clientHeight
-  renderer.setSize(rendererWidth, rendererWidth / aspectRatio);
-  renderer.setClearColor(0x88ff88)
+  this.renderer = new THREE.WebGLRenderer({ canvas: canvas3d });
 
+  this.rendererWidth = canvas3d.clientWidth
+  this.rendererHeight = canvas3d.clientHeight
+  let aspectRatio = canvas3d.clientWidth / canvas3d.clientHeight
+  this.renderer.setSize(this.rendererWidth, this.rendererWidth / aspectRatio);
+  this.renderer.setClearColor(0x88ff88)
+
+  
   //  Three: camera
-  const camera = new THREE.PerspectiveCamera(45, aspectRatio, 0.1, 20000);
-  camera.position.set(0, 0, 800);
-  camera.lookAt(0, 0, 0);
+  this.camera = new THREE.PerspectiveCamera(45, aspectRatio, 0.1, 20000);
+  this.camera.position.set(0, 0, 800);
+  this.camera.lookAt(0, 0, 0);
 
   //  Three: Scene
-  const scene = new THREE.Scene();
+  this.scene = new THREE.Scene();
 
   //  Three: lighting
-  var light = new THREE.AmbientLight(0xffffff, 0.5)
-  scene.add(light)
+  var light = new THREE.AmbientLight(0xffffff, 0.7)
+  this.scene.add(light)
 
-  var light1 = new THREE.PointLight(0xffffff, 0.9)
-  light1.position.set(-300, -300, 800)
-  scene.add(light1)
+  var light1 = new THREE.PointLight(0xffffff, 0.6)
+  light1.position.set(300, 300, 800)
+  this.scene.add(light1)
 
-  var light2 = new THREE.PointLight(0xffffff, 0.9)
-  light2.position.set(-300, -300, -800)
-  scene.add(light2)
+  var light2 = new THREE.PointLight(0xffffff, 0.6)
+  light2.position.set(300, 300, -800)
+  this.scene.add(light2)
+
+  var light3 = new THREE.PointLight(0xffffff, 0.4)
+  light3.position.set(-300, 300, 800)
+  this.scene.add(light3)
+
+  var light4 = new THREE.PointLight(0xffffff, 0.4)
+  light4.position.set(-300, -300, -800)
+  this.scene.add(light4)
 
 
   //  Three: custom geometry
@@ -47,7 +57,11 @@ function View3d(modele, canvas3dElt) {
   //  https://r105.threejsfundamentals.org/threejs/lessons/threejs-custom-buffergeometry.html
 
   const geometry = new THREE.BufferGeometry();
+
+
   initBuffers();
+
+
   function initBuffers() {
     // Keep the geometry parts as-is
     // Also used in Orisim3d.js
@@ -70,8 +84,9 @@ function View3d(modele, canvas3dElt) {
       // Triangle FAN can be used only because of convex CCW face
       var c = pts[0]; // center
       var p = pts[1]; // previous
+      var s = pts[2]; // second
       for (var i = 2; i < pts.length; i++) {
-        var s = f.points[i]; // second
+        
         vtx.push(c.x + f.offset * n[0]);
         vtx.push(c.y + f.offset * n[1]);
         vtx.push(c.z + f.offset * n[2]);
@@ -145,7 +160,9 @@ function View3d(modele, canvas3dElt) {
 
     // Used in draw()
     nbFacesVertice = faceVertexIndicesArray.length;
+
   }
+
 
   // Textures/materials
   const loader = new THREE.TextureLoader();
@@ -172,16 +189,17 @@ function View3d(modele, canvas3dElt) {
   }
 
 
-  initBuffers();
+  // initBuffers();
 
-  let color = 0xDD33DD;
-  const materialFront = new THREE.MeshLambertMaterial({ color: color, side: THREE.FrontSide });
+  let frontColor = 0xDD33DD;
+  const materialFront = new THREE.MeshLambertMaterial({ color: frontColor, side: THREE.FrontSide });
 
   //  Generate the mesh for paper!!
   const paper = new THREE.Mesh(geometry, materialFront) // Front and back materials
 
   // Generate Backside
-  var materialBack = new THREE.MeshLambertMaterial({ color: 0xAAAAAA, side: THREE.BackSide });
+  let backColor = 0x888888;
+  var materialBack = new THREE.MeshLambertMaterial({ color: backColor, side: THREE.BackSide });
   var backMesh = new THREE.Mesh(geometry, materialBack);
   paper.add(backMesh);
 
@@ -190,18 +208,33 @@ function View3d(modele, canvas3dElt) {
   var wireMesh = new THREE.Mesh(geometry, wireMaterial)
   paper.add(wireMesh)
 
+ 
   // Add to scene
   paper.position.x = 0;
-  scene.add(paper);
+  this.scene.add(paper);
+
+
+  // Add a wall
+  // var planeGeometry = new THREE.PlaneGeometry(10000, 10000);
+  // var planeMaterial = new THREE.MeshLambertMaterial({color: 0x66bb66});
+
+  // var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  // plane.receiveShadow = true;
+  // plane.position.x = 0;
+  // plane.position.y = 0;
+  // plane.position.z = -1000;
+  // this.scene.add(plane);
+
 
 
 
   // Three: Orbit Controls
   // controls
-  let controls = new OrbitControls( camera, renderer.domElement );
-  controls.listenToKeyEvents( window ); // optional
+  let controls = new OrbitControls(this.camera, this.renderer.domElement);
+  controls.listenToKeyEvents(window); // optional
 
   //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
+  controls.enablePan = true;
   controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
   controls.dampingFactor = 0.1;
   controls.screenSpacePanning = false;
@@ -209,71 +242,26 @@ function View3d(modele, canvas3dElt) {
   controls.maxDistance = 1000;
   controls.maxPolarAngle = Math.PI / 2;
 
+  // Mouse, keyboard, and touch controls are available
+
+
 
   
 
   // Three: Render
   function draw() {
-    renderer.render(scene, camera);
+
+    this.renderer.render(this.scene, this.camera);
     controls.update();
   }
 
 
-
+  
   // API
   this.initBuffers = initBuffers;
   this.draw = draw;
 
 }
 
-// Custom Shaders
-// https://madebyevan.com/shaders/grid/
-var vertexShader = `
-    varying vec3 vertex
-    void main()	{
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-    }
-  `;
-var fragmentShader = `
-    //#extension GL_OES_standard_derivatives : enable
-    
-    varying vec3 vertex;
-    uniform float thickness;
-    
-    float edgeFactor(vec3 p){
-      vec3 grid = abs(fract(p - 0.5) - 0.5) / fwidth(p) / thickness;
-      return min(min(grid.x, grid.y), grid.z);
-    }
-    
-    void main() {
-      
-      float a = edgeFactor(vUv);
-      
-      vec3 c = mix(vec3(1), vec3(0), a);
-      
-      gl_FragColor = vec4(c, 1.0);
-    }
-  `;
 
-
-
-// Current rotation angle ([x-axis, y-axis] degrees)
-View3d.currentAngle = [0.0, 0.0];
-View3d.scale = 1.0;
-
-// Projection and model view matrix for Perspective and Current
-View3d.projectionMatrix = new Float32Array(16);
-View3d.modelViewMatrix = new Float32Array(16);
-
-// Textures dimensions
-View3d.wTexFront = 1;
-View3d.hTexFront = 1;
-View3d.wTexBack = 1;
-View3d.hTexBack = 1;
-
-//   // Just for Node.js
-//   if (NODE_ENV === true && typeof module !== 'undefined' && module.exports) {
-//     module.exports = View3d;
-//   }
 export default View3d

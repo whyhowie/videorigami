@@ -7,14 +7,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#317EFB" />
   <link rel="stylesheet" href="./VideOrigami.css">
+  <link rel="stylesheet" href="./Material.css">
   <title>VideOrigami</title>
 
 
 </head>
 
 <body>
-  <div class="title">
-    <p>VideOrigami</p>
+  <div id="title-bar">
+    <h1>Origami Demo</h1>
+  </div>
+
+
+  <div id="canvas-container">
+    <canvas id="canvas3d"></canvas>
+    <div id="controls-3d">
+      <button id="restart" onclick="restartAnim()">
+        <i class="material-icons" title="Restart">replay</i>
+      </button>
+      <!-- <button id="previous" onclick="previousStep()">Previous!</button> -->
+      <button id="pause" onclick="pauseAnim()">
+        <i class="material-icons" title="Pause">pause</i>
+      </button>
+      <button id="continue" onclick="continueAnim()">
+        <i class="material-icons" title="Continue">play_arrow</i>
+      </button>
+      <button id="fast-forward" onclick="fastForward()">
+        <i class="material-icons" title="Fast forward">fast_forward</i>
+      </button>
+
+      <label class="checkbox-container">
+        <input type="checkbox" id="auto-pause" onchange="autoPause(this)">
+        Auto Pause
+        <span class="checkmark"></span>
+      </label>
+    </div>
+
+    <div id="controls-2d">
+      <label class="checkbox-container">
+        <input type="checkbox" id="canvas2d-toggle" onchange="show2Dcanvas(this)">
+        2D Canvas (Debugging only)
+        <span class="checkmark"></span>
+        <hr/>
+      </label>
+    </div>
+
+    <canvas id="canvas2d" class="collapse"></canvas>
+    
   </div>
 
 
@@ -33,19 +72,6 @@
     
   </div>
 
-  <div id="canvas-container">
-    <canvas id="canvas3d"></canvas>
-    <div id="3d-buttons">
-      <button id="restart" onclick="restartAnim()">Restart!</button>
-      <button id="previous" onclick="previousStep()">Previous!</button>
-      <button id="pause" onclick="pauseAnim()">Pause!</button>
-      <button id="continue" onclick="continueAnim()">Continue!</button>
-    </div>
-    
-
-    <canvas id="canvas2d"></canvas>
-  </div>
-
   
 
   <!-- Inlined models -->
@@ -58,9 +84,10 @@
     c 6 0 c 6 1 c 6 2 c 6 3
     // Movements to show crease pattern
     // Use iad interpolator while flipping the paper
+    iad
     t 500 ty 180)
     // Fold one corner
-    o 1 24 0 7 25) // Slide offset to avoid flickering
+    t 0 o 1 24 0 7 25 // Slide offset to avoid flickering
     t 1000 r 48 180 21 0 10) 
     t 500 ty 180)
     // Fold from top
@@ -71,38 +98,40 @@
     t 1000 r 29 179 5 22 2 a 19 3 17)
     t 500 r 54 -45 19 3 17)
     t 500 r 55 -30 17 a 3) // Lay flat
-    // Oreille bas
+    // Make bottom right flap
     t 500 r 53 -90 22 2 a 2 18) // Bof à revoir
     t 1000 r 45 179 1 12 7 a 18 2 22)
     t 500 r 53 -87 22 2 18 a 18 2)
-    t 100 r 52 30 18 a 2) // Ferme la patte
-    
-
-  </div>
-
-  <div hidden="true">
-    
-    
+    t 100 r 52 30 18 a 2) // Flatten it
     // Oreille bas gauche
     t 500 r 50 -90 1 12 a 1 24)
     t 1000 r 23 179 4 a 24 1 12)
     t 500 r 50 -87 12 1 24 a 24 1)
     t 100 r 50 -30 24 a 1) // Ferme la patte
     // Replie en ouvrant le bec
+    o -2 12 // Avoid flickering
     t 1000 r 16 -90 10 8 20 17 16 14 3 19 r 40 -90 0)
-    t 1000 ty 180)
-    t 500 r 16 -80 10 8 20 17 16 14 3 19 a 0)
+    t 1000 ty 225)
+    t 1000 r 16 -80 10 8 20 17 16 14 3 19 a 0)
     // Ajuste à peu près
-    o 0
     t 500 r 24 10 4 r 37 -10 8
-    r 29 -5 5 8 r 23 -5 7 4
+    t 500 r 29 -5 5 8 r 23 -5 7 4
+    o 1 12  // Move this face back
     r 15 10 21 r 15 -10 10)
     // Montre
     iao
-    t 1000 zf)
-    t 1000 tz -45)
-    t 1000 zf)
-    iso t 4000 ty 360)
+    t 1000 zf) 
+    iao
+    t 2000 ty 315)
+    iso
+    t 500 tz 45)
+
+  </div>
+
+  <div hidden="true">
+    
+    
+    
   </div>
 
 
