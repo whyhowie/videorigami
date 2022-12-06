@@ -66,8 +66,8 @@ function showProgress(event) {    // Scroll based on video progress
     let currentButtonElement = buttonElements[minNumberIndex]
 
     // Scroll into view
-    currentButtonElement.scrollIntoView({behavior: "smooth", block: "nearest", inline: "center"});
     currentButtonElement.classList.add('current')
+    currentButtonElement.scrollIntoView({behavior: "smooth", block: "nearest", inline: "center"});
 
     // Update progress value
     if (progressElement) {  // alternatively can use try...catch

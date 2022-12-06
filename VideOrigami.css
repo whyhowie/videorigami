@@ -209,6 +209,8 @@ button.running {
 #gradient-container {
   height: 100%;
   width: 100%;
+  max-width: 1024px;
+  margin: auto;
 
   mask-image: linear-gradient(transparent,
       white 10%,
@@ -248,6 +250,7 @@ button.running {
   display: flex;
   margin: auto;
   padding: 20px;
+  /* scroll-snap-type: x mandatory; */
 }
 
 #time-buttons button:first-child {
