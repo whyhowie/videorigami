@@ -229,8 +229,9 @@ button.running {
   border-radius: 10px;
   box-shadow: 5px 5px 20px #eee;
 
-  transition: 0.3s ease-in-out
+  transition: 0.3s ease-in-out;
 }
+
 #time-buttons button:hover{
   cursor: pointer;
   background-color: #aaa;
@@ -249,6 +250,13 @@ button.running {
 #time-buttons button img {
   width: 200px;
   height: 200px;
+  transform: scale(1.2);
+  -webkit-filter: drop-shadow(1px 1px 1px black)
+                  drop-shadow(-1px -1px 1px black);
+  filter: drop-shadow(1px 1px 1px black) 
+          drop-shadow(-1px -1px 1px black);
+  /* This is a workaround to add outline/glow to .png */
+  /* From:  https://stackoverflow.com/questions/12690444/css-border-on-png-image-with-transparent-parts*/
 }
 
 /* Progress bar (for debugging) */
