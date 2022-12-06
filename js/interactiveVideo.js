@@ -7,7 +7,11 @@ let progressElement = document.getElementById('progress')
 let progressTextElement = document.createElement('p')
 let currentProgress = 0
 progressTextElement.innerText = `${currentProgress.toFixed(2)}%`
-progressElement.insertAdjacentElement("afterend", progressTextElement)
+
+if (progressElement) {
+  progressElement.insertAdjacentElement("afterend", progressTextElement)
+}
+
 
 
 
@@ -17,7 +21,11 @@ timeStamps.map( (t, idx) => {
     buttonElement.classList.add('button')
     buttonElement.setAttribute('data-start', t)
     buttonElement.setAttribute('id', 'button-'+idx)
-    buttonElement.innerHTML = `<img src='../assets/images/cocotte-sticker.png' alt="Cocotte Sticker Icon" width="200" height="200">Step ${idx}</img>`
+    buttonElement.innerHTML = `<img src='../assets/images/steps/step (${idx}).png' 
+      alt="Cocotte Sticker Icon"
+      width="200" height="200">
+        Step ${idx}
+      </img>`
     // buttonElement.innerHTML = '@' + t.toFixed(1) + ' second'
     buttonElement.setAttribute('onclick', 'jumpTo(event)')
     timeButtonsElement.appendChild(buttonElement)
@@ -46,7 +54,7 @@ function showProgress(event) {    // Scroll based on video progress
 
     // Make previously highlighted active button inactive
     timeStamps.map((_,idx) => {
-      buttonElements[idx].classList.remove('active')
+      buttonElements[idx].classList.remove('current')
     })
     
 
@@ -59,11 +67,13 @@ function showProgress(event) {    // Scroll based on video progress
 
     // Scroll into view
     currentButtonElement.scrollIntoView({behavior: "smooth", block: "nearest", inline: "center"});
-    currentButtonElement.classList.add('active')
+    currentButtonElement.classList.add('current')
 
     // Update progress value
-    progressElement.setAttribute("value", currentProgress)
-    progressTextElement.innerText = `${currentProgress.toFixed(2)}%`
+    if (progressElement) {  // alternatively can use try...catch
+      progressElement.setAttribute("value", currentProgress)
+      progressTextElement.innerText = `${currentProgress.toFixed(2)}%`
+    }
   }
 
 
