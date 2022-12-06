@@ -21,7 +21,7 @@ timeStamps.map( (t, idx) => {
     buttonElement.classList.add('button')
     buttonElement.setAttribute('data-start', t)
     buttonElement.setAttribute('id', 'button-'+idx)
-    buttonElement.innerHTML = `<img src='../assets/images/steps/step (${idx}).png' 
+    buttonElement.innerHTML = `<img src='./assets/images/steps/step (${idx}).png' 
       alt="Cocotte Sticker Icon"
       width="200" height="200">
         Step ${idx}
