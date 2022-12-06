@@ -14,62 +14,82 @@
 </head>
 
 <body>
-  <div id="title-bar">
-    <h1>Origami Demo</h1>
-  </div>
+  <header id="title-bar">
+    <h1>ORIGAMI DEMO</h1>
+  </header>
 
+  <div id="not-title-bar">
+    <div id="canvas-container">
+      <!-- Including both 2D and 3D canvases -->
+      <div id="canvas3d-group">
+        <div id="canvas3d-decor-frame">
+          <!-- This decoration frame has some box shadow -->
+          <button id="screenshot" onclick="takeScreenshot()" class="normal">
+            <i class="material-icons">photo_camera</i>
+          </button>
+        </div>
+        <div id="canvas3d-container">
+          <canvas id="canvas3d"></canvas>
+          <div id="controls-3d">
+            <button id="restart" onclick="restartAnim()" title="Restart" class="normal">
+              <i class="material-icons">replay</i>
+            </button>
+            <!-- <button id="previous" onclick="previousStep()">Previous!</button> -->
+            <button id="pause" onclick="pauseAnim()" title="Pause" class="normal">
+              <i class="material-icons">pause</i>
+            </button>
+            <button id="continue" onclick="continueAnim()" title="Continue" class="normal">
+              <i class="material-icons">play_arrow</i>
+            </button>
+            <button id="fast-forward" onclick="fastForward()" class="normal">
+              <i class="material-icons" title="Fast forward">fast_forward</i>
+            </button>
 
-  <div id="canvas-container">
-    <canvas id="canvas3d"></canvas>
-    <div id="controls-3d">
-      <button id="restart" onclick="restartAnim()">
-        <i class="material-icons" title="Restart">replay</i>
-      </button>
-      <!-- <button id="previous" onclick="previousStep()">Previous!</button> -->
-      <button id="pause" onclick="pauseAnim()">
-        <i class="material-icons" title="Pause">pause</i>
-      </button>
-      <button id="continue" onclick="continueAnim()">
-        <i class="material-icons" title="Continue">play_arrow</i>
-      </button>
-      <button id="fast-forward" onclick="fastForward()">
-        <i class="material-icons" title="Fast forward">fast_forward</i>
-      </button>
+            <label class="checkbox-container">
+              <input type="checkbox" id="auto-pause" onchange="autoPause(this)" class="normal">
+              Auto Pause
+            </label>
+          </div>
+        </div>
+      </div>
+      
 
-      <label class="checkbox-container">
-        <input type="checkbox" id="auto-pause" onchange="autoPause(this)">
-        Auto Pause
-        <span class="checkmark"></span>
-      </label>
+      <div id="controls-2d">
+        <label class="checkbox-container">
+          <input type="checkbox" id="canvas2d-toggle" onchange="show2Dcanvas(this)">
+          2D Canvas (Debugging only)
+          <hr/>
+        </label>
+      </div>
+      <canvas id="canvas2d" class="collapse"></canvas>
+      
     </div>
 
-    <div id="controls-2d">
-      <label class="checkbox-container">
-        <input type="checkbox" id="canvas2d-toggle" onchange="show2Dcanvas(this)">
-        2D Canvas (Debugging only)
-        <span class="checkmark"></span>
-        <hr/>
-      </label>
+
+    <div id="video-container">
+      <video controls id="video-demo" ontimeupdate="showProgress(event)">
+        <source src="/assets/videos/catjam_blue.mp4"
+          type="video/mp4" />
+      </video>
+      <div id="time-buttons">
+        <!-- Button elements -->
+      </div>
+
+      <!-- <div id="progress-container">
+        <progress id="progress" max="100"></progress>
+      </div> -->
     </div>
 
-    <canvas id="canvas2d" class="collapse"></canvas>
-    
-  </div>
+    <br/>
+    <hr/>
 
+    <footer>
+      <p>&copy; 2022 Howie Wang.</p>
+      <p> Original 3D origami visualization by 
+        <a href="https://github.com/RemiKoutcherawy/RemiKoutcherawy.github.io">Rémi Koutcherawy</a>.
+      </p>
+    </footer>
 
-  <div id="video-container">
-    <video controls id="video-demo" ontimeupdate="showProgress(event)">
-      <source src="/assets/videos/catjam_blue.mp4"
-        type="video/mp4" />
-    </video>
-    <div id="time-buttons">
-      <!-- Button elements -->
-    </div>
-
-    <div id="progress-container">
-      <progress id="progress" max="100"></progress>
-    </div>
-    
   </div>
 
   
@@ -87,7 +107,7 @@
     iad
     t 500 ty 180)
     // Fold one corner
-    t 0 o 1 24 0 7 25 // Slide offset to avoid flickering
+    o 1 24 0 7 25 // Slide offset to avoid flickering
     t 1000 r 48 180 21 0 10) 
     t 500 ty 180)
     // Fold from top
@@ -122,9 +142,9 @@
     iao
     t 1000 zf) 
     iao
-    t 2000 ty 315)
+    t 2000 ty 315
     iso
-    t 500 tz 45)
+    t 1000 tz 45)
 
   </div>
 

@@ -8,18 +8,23 @@ import { OrbitControls } from './OrbitControls.js'
 // View3d
 function View3d(modele, canvas3dElt) {
   // Instance variables
-  var model = modele;
-  var canvas3d = canvas3dElt;
+  var model = modele; // Object reference
+  var canvas3d = canvas3dElt; // Object reference
   var nbFacesVertice = 0;
 
   //  Three: initialisation
-  this.renderer = new THREE.WebGLRenderer({ canvas: canvas3d });
+  this.renderer = new THREE.WebGLRenderer({ 
+    canvas: canvas3d,
+    antialias: true,
+    alpha: true });
+
+  let backgroundColor = 0x88ee88;
 
   this.rendererWidth = canvas3d.clientWidth
   this.rendererHeight = canvas3d.clientHeight
   let aspectRatio = canvas3d.clientWidth / canvas3d.clientHeight
   this.renderer.setSize(this.rendererWidth, this.rendererWidth / aspectRatio);
-  this.renderer.setClearColor(0x88ff88)
+  this.renderer.setClearColor(backgroundColor, 1) // second argument is opacity
 
   
   //  Three: camera
@@ -226,8 +231,6 @@ function View3d(modele, canvas3dElt) {
   // this.scene.add(plane);
 
 
-
-
   // Three: Orbit Controls
   // controls
   let controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -242,24 +245,95 @@ function View3d(modele, canvas3dElt) {
   controls.maxDistance = 1000;
   controls.maxPolarAngle = Math.PI / 2;
 
-  // Mouse, keyboard, and touch controls are available
+  // Mouse, keyboard, and touch controls are available by default
 
 
 
-  
 
+
+  // Three: take screenshots
+  //  From: https://jsfiddle.net/2pha/art388yv/
+  function takeScreenshot(mode = 0) {
+    this.renderer.setClearColor(0xffffff, 0)  // set background to transparent
+    switch (mode) {
+      case 0: // open in new tab/window
+        // open in new window like this
+        var w = window.open('', '');
+        w.document.title = "Screenshot";
+        var img = new Image();
+        // Without 'preserveDrawingBuffer' set to true, we must render now
+        this.renderer.render(this.scene, this.camera);
+        img.src = this.renderer.domElement.toDataURL();
+        w.document.body.appendChild(img); 
+        break;
+
+      case 1: // download using toDataURL
+        // download file like this.
+        // simulating a link click
+        var a = document.createElement('a');
+        // Without 'preserveDrawingBuffer' set to true, we must render now
+        this.renderer.render(this.scene, this.camera);
+        a.href = this.renderer.domElement.toDataURL().replace("image/png", "image/octet-stream");
+        a.download = 'canvas.png'
+        a.click();
+        break;
+
+      case 2: // download using toBlob
+        // New version of file download using toBlob.
+        // toBlob should be faster than toDataUrl.
+        // But maybe not because also calling createOjectURL.
+        //
+        this.renderer.render(this.scene, this.camera);
+        this.renderer.domElement.toBlob(function(blob){
+          var a = document.createElement('a');
+          var url = URL.createObjectURL(blob);
+          a.href = url;
+          a.download = 'canvas.png';
+          a.click();
+        }, 'image/png', 1.0);
+        break;
+    
+      default:
+        break;
+    }
+      
+    this.renderer.setClearColor(backgroundColor, 1)
+
+  }
+
+
+  // --------------------------- FINALLY ---------------------------------------//
   // Three: Render
   function draw() {
-
     this.renderer.render(this.scene, this.camera);
     controls.update();
   }
+
+
+  //  Responsive window (need to put canvas3d in a container)
+  let containerElt = canvas3d.parentElement;
+  if (containerElt) {
+    window.addEventListener("resize", () => {
+
+      this.rendererWidth = containerElt.clientWidth
+      let aspectRatio = containerElt.clientWidth / containerElt.clientHeight
+      this.renderer.setSize(this.rendererWidth, this.rendererWidth / aspectRatio);
+      this.camera.aspect = aspectRatio;
+      this.camera.updateProjectionMatrix();
+  
+    });
+  }
+  
+
+  
+
 
 
   
   // API
   this.initBuffers = initBuffers;
   this.draw = draw;
+  this.takeScreenshot = takeScreenshot;
 
 }
 

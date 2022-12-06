@@ -1,15 +1,30 @@
+:root {
+  --min-canvas-width: 700px;
+  --canvas-height: 75vh;
+  --canvas-border-radius: 10px;
+}
+
 body {
   text-align: center;
   overflow-x: hidden;
 }
 
+h1 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 40px;
+  font-weight: 300;
+}
+  
+
 #title-bar {
   width: 101%;
   margin: auto;
   height: 10vh;
-  position: relative;
-  top: -2vh;
-  left: -2vh;
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  background-color: white;
   box-shadow: 5px 5px 10px #eee;
   padding: 10px;
 }
@@ -19,8 +34,162 @@ body {
   vertical-align: middle;
 }
 
+/* -------------------------- */
+#not-title-bar {
+  position: relative;
+}
+
+
+
+/* -------------------------------- */
+/* -------------Canvases----------- */
+#canvas-container {
+  position: relative;
+  top: 5vh;
+  width: 100%;
+}
+
+#canvas3d-group {
+  position: relative;
+}
+
+/* Decoration frame with box shadow */
+#canvas3d-decor-frame {
+  pointer-events: none;
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  width: 95%;
+  min-width: var(--min-canvas-width);
+  height: var(--canvas-height);
+  transform: translate(-50%, 0);
+  box-shadow: inset 0px 0px 20px #eee;
+  text-align: left;
+  border-radius: var(--canvas-border-radius);
+}
+
+
+/* The real canvas3d container */
+#canvas3d-container {
+  width: 95%;
+  min-width: var(--min-canvas-width);
+  height: var(--canvas-height);
+  margin: auto;
+  border: 1px solid #eee;
+  border-radius: var(--canvas-border-radius);
+}
+
+#canvas2d {
+  width: 400px;
+  height: 400px;
+  left: 0;
+  top: 0;
+  border: 1px solid black;
+}
+
+.collapse {
+  visibility: collapse;
+  position: absolute;
+  top: 0;
+
+}
+
+#canvas3d {
+  width: 100%;
+  min-width: var(--min-canvas-width);
+  height: var(--canvas-height);
+  left: 50%;
+  top: 0;
+  border-radius: var(--canvas-border-radius);
+}
+
+#controls-3d {
+  position: relative;
+  top: -10vh;
+  width: 90%;
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+button {
+  background-color: white;
+  border: 1px solid black;
+  transition: 0.1s ease-in;
+  box-shadow: 2px 2px 5px #aaa;
+}
+
+button.normal { 
+  display: inline-block;
+  border-radius: 0px;
+  font-size: 18px;
+  /* height: 100vmin; */
+  margin: 10px;
+  padding: 10px;
+  width: 100px;
+  border-radius: 500px;
+}
+button.normal:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  transition: 0.2s ease-in-out;
+  background-color: #aaa;
+  color: white;
+}
+button.normal:active {
+  background-color: #e5e;
+}
+
+button.running {
+  background-color: #8f8;
+  color: white;
+}
+
+
+#controls-3d label {
+  font-size: 20px;
+  padding: 5px;
+}
+#controls-3d label:hover {
+  cursor: pointer;
+  background-color: #e5e;
+  color: white;
+}
+#controls-3d input[type='checkbox'] {
+  transform: scale(2.0);
+}
+#controls-3d input:hover {
+  cursor: pointer;
+}
+
+/* Screenshot button */
+#screenshot {
+  pointer-events: all;
+  /* Need to turn pointer events back on */
+  position: relative;
+  left: 10px;
+  width: 60px;
+  height: 60px;
+  font-size: 12px;
+  border-radius: 50%;
+}
+
+
+/* ------------------------------- */
+/* -------------Video-------------- */
+
+
+#video-container {
+  position: relative;
+  margin: 100px 0px 50px 0px;
+  scroll-snap-type: y proximity;
+}
 
 #video-container video {
+  position: relative;
   width: 95%;
   height: auto;
   max-width: 1024px;
@@ -31,9 +200,12 @@ body {
   /* background-color: aqua; */
   width: 95%;
   max-width: 1024px;
+  height: 300px;
   overflow-x: scroll;
+  overflow-y: hidden;
   display: flex;
   margin: auto;
+  padding: 20px;
 }
 
 #time-buttons button:first-child {
@@ -51,22 +223,35 @@ body {
   font-size: 24px;
   /* height: 100vmin; */
   margin: 10px;
-  padding: 20px;
-  border: 2px solid black;
+  padding: 10px;
+  border: 1px solid black;
   width: 250px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 20px #eee;
+
+  transition: 0.3s ease-in-out
 }
 #time-buttons button:hover{
   cursor: pointer;
-  color: white;
-  background-color: rgb(196, 73, 118);
+  background-color: #aaa;
+  box-shadow: 5px 5px 50px #eee;
   transform: scale(1.1);
 }
-#time-buttons .active{
-  color: white;
-  background-color:rgb(23, 159, 84)
+#time-buttons button:active{
+  background-color: #8f8;
+  transition: 0.1s ease-in;
+}
+#time-buttons .current{
+  background-color: #8f8;
+  transition: 0.1s ease-in;
 }
 
+#time-buttons button img {
+  width: 200px;
+  height: 200px;
+}
 
+/* Progress bar (for debugging) */
 #progress-container {
   display: flex;
   /* align-items: flex-start; */
@@ -79,71 +264,7 @@ body {
   /* border: 2px solid; */
 }
 #progress-container p {
-  color: darkblue;
+  color: #222;
   margin: 10px;
 }
 
-
-#canvas2d {
-  width: 400px;
-  height: 400px;
-  left: 0;
-  top: 0;
-  border: 1px solid darkblue;
-}
-
-.collapse {
-  visibility: collapse;
-  position: absolute;
-  top: 0;
-
-}
-
-#canvas3d {
-  margin-top: 2vh;
-  width: 95%;
-  max-width: 2000px;
-  height: 80vh;
-  left: 50%;
-  top: 0;
-  border: 1px solid darkblue;
-}
-
-#controls-3d {
-  position: relative;
-  top: -10vh;
-  width: 90%;
-  max-width: 1000px;;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: space-evenly;
-}
-
-#controls-3d button {
-  background-color: white;
-  display: inline-block;
-  border-radius: 0px;
-  /* height: 200px; */
-  font-size: 18px;
-  /* height: 100vmin; */
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid black;
-  width: 100px;
-}
-#controls-3d button:hover {
-  cursor: pointer;
-}
-#controls-3d button:active {
-  background-color: #DD33DD;
-}
-
-/* Hide the browser's default checkbox */
-/* Customize the label (the container) */
-/* https://www.w3schools.com/howto/howto_css_custom_checkbox.asp */
-#controls-3d input {
-  transform: scale(2.0);
-  margin: 20px 10px 20px 50px;
-}
