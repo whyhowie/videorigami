@@ -119,9 +119,11 @@ h1 {
   border-radius: var(--canvas-border-radius);
 }
 
+
+/* Origami model control group */
 #controls-3d {
   position: relative;
-  top: -110px;
+  top: -15vh;
   width: 90%;
   max-width: 1000px;
   margin: auto;
@@ -131,8 +133,6 @@ h1 {
   justify-content: space-evenly;
 }
 
-
-
 button {
   background-color: white;
   border: 1px solid black;
@@ -140,15 +140,26 @@ button {
   box-shadow: 2px 2px 5px #aaa;
 }
 
+button .material-icons {
+  /* https://developers.google.com/fonts/docs/material_icons */
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 5vmin;  /* Preferred icon size */
+  margin: auto;
+}
+
 button.normal { 
   display: inline-block;
   border-radius: 0px;
-  font-size: 18px;
   /* height: 100vmin; */
   margin: 10px;
   padding: 10px;
-  width: 100px;
-  border-radius: 500px;
+  width: 15vw;
+  height: 10vh;
+  max-width: 200px;
+  max-height: 100px;
+  border-radius: 800px;
 }
 button.normal:hover {
   cursor: pointer;
@@ -169,6 +180,7 @@ button.running {
 
 
 #controls-3d label {
+  width: 15vw;
   font-size: 20px;
   padding: 5px 10px;
   border-radius: 100px;
@@ -191,12 +203,14 @@ button.running {
 #screenshot {
   pointer-events: all;
   /* Need to turn pointer events back on */
+  vertical-align: middle;
   position: relative;
-  top: 10px;
-  left: 10px;
-  width: 60px;
-  height: 60px;
-  font-size: 12px;
+  top: 2vmin;
+  left: 2vmin;
+  width: 10vmin;
+  height: 10vmin;
+  /* min-width: 80px;
+  min-height: 80px; */
   border-radius: 50%;
 }
 

@@ -104,7 +104,6 @@ function restartAnim() {
 
 
 function previousStep() {
-  cancelAnimationFrame(animReq);
   OrigamiDemo.command.command("u")
   // OrigamiDemo.command.state = State.idle
   // rebuild()
