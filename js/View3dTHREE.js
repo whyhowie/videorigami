@@ -242,7 +242,7 @@ function View3d(modele, canvas3dElt) {
   controls.dampingFactor = 0.1;
   controls.screenSpacePanning = false;
   controls.minDistance = 100;
-  controls.maxDistance = 1000;
+  controls.maxDistance = 1400;
   controls.maxPolarAngle = Math.PI / 2;
 
   // Mouse, keyboard, and touch controls are available by default

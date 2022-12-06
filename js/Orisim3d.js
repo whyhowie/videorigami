@@ -137,7 +137,6 @@ function setRunningListener() {
     if (OrigamiDemo.command.state == State.run || 
       OrigamiDemo.command.state == State.anim) {
       continueButtonElt.classList.add("running")
-      console.log("now Running")
       return setTimeout(runningListener, 100);
     }
     // If state says not running

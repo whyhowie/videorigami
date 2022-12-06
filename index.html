@@ -4,12 +4,22 @@
 <head>
   <link>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta id="vp" name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#317EFB" />
   <link rel="stylesheet" href="./VideOrigami.css">
   <link rel="stylesheet" href="./Material.css">
   <title>VideOrigami</title>
 
+  <script>
+    // If screen too narrow, make it 375
+    // https://stackoverflow.com/questions/15040408/achieving-min-width-with-viewport-meta-tag
+    window.onload = function() {
+      if (screen.width < 375) {
+          var mvp = document.getElementById('vp');
+          mvp.setAttribute('content','user-scalable=no', 'width=375');
+      }
+    }
+  </script>
 
 </head>
 
@@ -74,8 +84,10 @@
         <source src="assets/videos/catjam_blue.mp4"
           type="video/mp4" />
       </video>
-      <div id="time-buttons">
-        <!-- Button elements -->
+      <div id="gradient-container">
+        <div id="time-buttons">
+          <!-- Button elements -->
+        </div>
       </div>
 
       <!-- <div id="progress-container">
