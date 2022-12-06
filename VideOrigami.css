@@ -228,7 +228,8 @@ button.running {
 
 #video-container {
   position: relative;
-  margin: 100px 0px 50px 0px;
+  top: 40px;
+  margin: 50px 0px 50px 0px;
   scroll-snap-type: y proximity;
 }
 
