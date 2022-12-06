@@ -1517,13 +1517,7 @@ OR.Command = function (modele) {
   // Between 0 and 1
   var tni = 1;
   var tpi = 0;
-
-  // Some interactive properties
-  this.animDone; //  Animation done flag
-  this.pauseRequest; //  Pause request
-  this.autoPause; // Auto pausing settings
-  this.fastForward; // Fast forward
-
+  var animDoneFlag = false; //  Animation done flag
   // scale, cx, cy, cz used in ZoomFit
   var za = [0, 0, 0, 0];
   // Interpolator used in anim() to map tn (time normalized) to tni (time interpolated)
@@ -1596,6 +1590,7 @@ OR.Command = function (modele) {
   // Execute one command line on model
   const execute = (cmd, dir = 1) => { // Arrow function to bind "this"
     // dir indicates whether the command is reversed
+
     var list = [], a = null, b = null, angle = null, s = null, p = null;
     let idx = 0;
 
@@ -1830,14 +1825,13 @@ OR.Command = function (modele) {
 
       // End of command and default behavior
       else if (cmd[idx] === "eoc") {
-        idx++
-        if (this.autoPause) {
-          this.pauseRequest = true;
-        }
-        if (this.fastForward) {
-          !this.fastForward
-        }
+        idx++;
+        this.state = State.pause
       }
+      // Fast forward (for rollback())
+      else if (cmd[idx] === "ff") {
+        idx++;
+      } 
       else {
         // Real default : ignore illegal characters
         idx++;
@@ -1883,66 +1877,67 @@ OR.Command = function (modele) {
   // To avoid errors I cheated a little bit:
   //  the function does not actually "rollback". Instead, it rebuilds the whole
   //  model up to the previous step
+  // var rolledToTop = this.cmdList[this.iCmd-1].startsWith('c'||'b'||'c'||'lol'||'p'||'s')
 
   const rollBack = () => {
     // Roll back to the previous command
-    // if (this.iCmd >= 1 && !(/^[dcbps]|lol/i.test(this.cmdList[this.iCmd-1]))) {
-    //   --this.iCmd
-    //   console.log("registered")
-    //   // console.log(this.cmdList[this.iCmd-1])
-    //   // console.log((/^[dcbps]|lol/i.test(this.cmdList[this.iCmd-1])))
-    //   while (this.iCmd >= 1 && !this.cmdList[this.iCmd-1].endsWith('eoc') &&
-    //     !(/^[dcbps]|lol/i.test(this.cmdList[this.iCmd-1]))) { 
-    //     // Keep checking previous commands
-    //     // Make sure to stop at a a pause ("eoc")
-    //     console.log("rolling back more")
-    //     --this.iCmd;
-    //   }
-    //   console.log(this.cmdList[this.iCmd])
-    // }
-    // else {
-    //   console.log("Nope!")
-    // }
+    if (this.iCmd >= 1 && !(/^[dcbps]|lol/i.test(this.cmdList[this.iCmd-1]))) {
+      --this.iCmd
+      console.log("registered")
+      // console.log(this.cmdList[this.iCmd-1])
+      // console.log((/^[dcbps]|lol/i.test(this.cmdList[this.iCmd-1])))
+      while (this.iCmd >= 1 && !this.cmdList[this.iCmd-1].endsWith('eoc') &&
+        !(/^[dcbps]|lol/i.test(this.cmdList[this.iCmd-1]))) { 
+        // Keep checking previous commands
+        // Make sure to stop at a a pause ("eoc")
+        console.log("rolling back more")
+        --this.iCmd;
+      }
+      console.log(this.cmdList[this.iCmd])
+    }
+    else {
+      console.log("Nope!")
+    }
 
-    // // console.log(stepModels)
-    // // let modelB4Execute = stepModels[this.iCmd-1]
-    // // stepModels = stepModels.pop()
-    // // console.log(JSON.stringify(model) == JSON.stringify(modelB4Execute))
-    // // model = deepCopy(modelB4Execute)
-    // // console.log(JSON.stringify(model) == JSON.stringify(modelB4Execute))
-    // // model.change = true
-    // // commandLoop()
+    // console.log(stepModels)
+    // let modelB4Execute = stepModels[this.iCmd-1]
+    // stepModels = stepModels.pop()
+    // console.log(JSON.stringify(model) == JSON.stringify(modelB4Execute))
+    // model = deepCopy(modelB4Execute)
+    // console.log(JSON.stringify(model) == JSON.stringify(modelB4Execute))
+    // model.change = true
+    // commandLoop()
     
-    // // // Check if it's the right command selected
-    // // // this.currentCmd = this.cmdList[this.iCmd].split(' ');
-    // // // console.log(this.currentCmd)
+    // // Check if it's the right command selected
+    // // this.currentCmd = this.cmdList[this.iCmd].split(' ');
+    // // console.log(this.currentCmd)
         
-    // let cmdListTemp = this.cmdList.slice(0, this.iCmd)
+    let cmdListTemp = this.cmdList.slice(0, this.iCmd)
 
-    // cmdListTemp.forEach( (x, idx) => {
-    //   if (x.split(' ')[0] == 't') { // Can't use startsWith because of 't' and 'ty'
-    //     let xtemp = x.split(' ')
-    //     xtemp[1] = 10
-    //     cmdListTemp[idx] = xtemp.join(' ')
-    //   }
-    // } )
-    // cmdListTemp.forEach( (x, idx) => {
-    //   if (x.endsWith('eoc')) {
-    //     // cmdListTemp[idx] = x.split(' ').slice(0, -1).join(' ')
-    //     cmdListTemp[idx] = x.replace('eoc','eoc')
-    //   }
-    // } )
-    // cmdListTemp[cmdListTemp.length-1] = cmdListTemp[cmdListTemp.length-1].replace('ff','eoc')
-    // // console.log(this.cmdList)
+    cmdListTemp.forEach( (x, idx) => {
+      if (x.split(' ')[0] == 't') { // Can't use startsWith because of 't' and 'ty'
+        let xtemp = x.split(' ')
+        xtemp[1] = 10
+        cmdListTemp[idx] = xtemp.join(' ')
+      }
+    } )
+    cmdListTemp.forEach( (x, idx) => {
+      if (x.endsWith('eoc')) {
+        // cmdListTemp[idx] = x.split(' ').slice(0, -1).join(' ')
+        cmdListTemp[idx] = x.replace('eoc','eoc')
+      }
+    } )
+    cmdListTemp[cmdListTemp.length-1] = cmdListTemp[cmdListTemp.length-1].replace('ff','eoc')
+    // console.log(this.cmdList)
     
-    // this.cmdList.splice(0, cmdListTemp.length, ...cmdListTemp)
-    // console.log(this.cmdList.join('\n'))
-    // // this.cmdList = cmdListTemp
-    // this.newCmdText = this.cmdList.join('\n')
-    // console.log(this.newCmdText)
+    this.cmdList.splice(0, cmdListTemp.length, ...cmdListTemp)
+    console.log(this.cmdList.join('\n'))
+    // this.cmdList = cmdListTemp
+    this.newCmdText = this.cmdList.join('\n')
+    console.log(this.newCmdText)
 
-    // tn = 1;
-    // this.state = State.undo
+    tn = 1;
+    this.state = State.idle
       
     // this.state = State.run
     // console.log(cmdListTemp) 
@@ -1962,23 +1957,23 @@ OR.Command = function (modele) {
     // model.change = true
     // The repaint will not occur till next animation, or end Cde
         
+
+
+    
     return
 
   }
 
 
-
-
-
   // Main entry Point
-  // Execute a text file of commands or react to user inputs
+  // Execute a text file of commands
   // TODO : simplify
-  const command = (cde) => {
-    
-    if (cde === null) return;
+  const command = (cde) => {  // arrow function to bind "this"
 
-    // When idle, the function returns early only when no commands or "read"
+    // -- State Idle tokenize list of command
     if (this.state === State.idle) {
+
+      // When idle, the function returns early only when no commands or "read"
       if (cde.startsWith("read")) {
         var filename = cde.substring(5);
         if (filename.indexOf("script") !== -1) {
@@ -1990,44 +1985,54 @@ OR.Command = function (modele) {
           // Attention replace argument cde by the content of the file
           cde = readfile(filename.trim());
         }
-        if (cde === null) return; // Return if no file available
+        if (cde === null)
+          return;
+        // On success clear toko and use read cde
+        done = [];
+        undo = [];
+        // Continue to Execute
+      }
+      else if (cde === "co" || cde === "pa") {
+        // In idle, no job, continue, or pause are irrelevant
+        return;
+      }
+      else if (cde.startsWith("d")) {
+        // Starts a new folding
+        done = [];
+        undo = [];
       }
 
       // If not the cases above, start execute folding commands.
-      tokenize(cde) // This can output a list of commands; by default it changes this.cmdList
+      // Initialize again!
+      tokenize(cde)
+      // toko  = tokenize(cde);
       this.state = State.run;
       this.iCmd = 0;
       commandLoop();
       return;
     }
-
-    // -- State Run execute list of commands
-    else if (this.state === State.run) {
+    // -- State Run execute list of command
+    if (this.state === State.run) {
       commandLoop();
       return;
     }
-
     // -- State Animation execute up to ')' or pause
-    else if (this.state === State.anim) {
+    if (this.state === State.anim) {
       // "Pause"
       if (cde === "pa") {
-        console.log("pause requested")
-        this.pauseRequest = true;
-        // this.state = State.pause;
-      }
-      if (cde === "ff") {
-        console.log("fast forward requested")
-        this.fastForward = true;
+        // pauseStart = new Date().getTime()
+        this.state = State.pause;
       }
       return;
-    }
 
+    }
     // -- State Paused in animation
-    else if (this.state === State.pause) {
-      // this.pauseRequest = false; // If we entered this state, it means that the request is completed
+    if (this.state === State.pause) {
       // "Continue"
       if (cde === "co") {
-        if (tn >= 1.0) {  // tn indicates whether the animation of the step is complete
+        if (tn >= 1.0) {
+          // console.log("Continue from OR.js")
+          this.cmdList = this.origCmdList // Replace the command list with original
           pauseDuration = new Date().getTime() - pauseStart;
           this.state = State.run;
           model.change = true
@@ -2036,14 +2041,7 @@ OR.Command = function (modele) {
         else {
           console.log("Animation still in progress!")
         }
-      }
-      else if (cde === "ff") {
-        console.log("fast forward requested")
-        this.fastForward = true;
-        pauseDuration = new Date().getTime() - pauseStart;
-        this.state = State.run;
-        model.change = true
-        commandLoop();
+
       }
       else if (cde === "u") {
         // Undo one step
@@ -2051,68 +2049,68 @@ OR.Command = function (modele) {
       }
       return;
     }
-
     // -- State undo (Not using it now)
-    else if (this.state === State.undo) {    
+    if (this.state === State.undo) {
+      // if (undoInProgress === false) {
+      
+        if (cde === "pa") {
+          // Forbidden ignore pause
+        } else {
+          // A new Command can only come from Debug
+          // Removes 't' or 'd'
+          // Execute
+          tokenize(cde);
+          this.state = State.run;
+          this.iCmd = 0;
+          commandLoop();
+        }
+      // }
     }
   }
-
-
-
-
 
   // Loop to execute commands
   const commandLoop = () => { // arrow function to bind "this"
 
     while (this.iCmd < this.cmdList.length) { // Keep reading command lines!
 
-      //  Get the current command     
+      //  Get the current command
+      
       this.currentCmd = this.cmdList[this.iCmd].split(' ');
+      // console.log(this.currentCmd)
 
       // When seeing "t" (animation time), stop reading more commands
-      // and break the loop and use anim() to complete the animation
+      // and focus on animating the current command
       if (this.currentCmd[0] === "t") {
         // Time t duration ... )
-        duration = this.currentCmd[1];
-        this.currentCmd.splice(0, 2)  // After getting the duration, remove the it from the current command
+        duration = this.currentCmd[1];  //  ++x returns value after incrementing
+        this.currentCmd.splice(0, 2)
         pauseDuration = 0;
-
-        this.state = State.anim;  // Change state to animation
+        this.state = State.anim;
         animStart();
-        this.iCmd++;  // Increment command index for a new command after animation
-
-        // Return breaks the loop, giving control to anim()
-        // After finishing the animation, anim() will call commandLoop again
+        this.iCmd++;
+        // Return breaks the loop, giving control to anim
         return;
       }
 
-      // When no "t" indicating animation
-      // Execute one basic command
+      // Execute one command
       execute(this.currentCmd);
-
-      // Keep track of the model changes (might not work)
       let modelCopy = new OR.Model()
       modelCopy = deepCopy(model)
       stepModels.push(modelCopy)
-
       this.iCmd++;  // Move to the next command!
 
       // Post an event to repaint
       // The repaint will not occur till next animation, or end Cde
       model.change = true;
-    } // End of while loop
-
+    }
     // When run out of commands, switch to idle
     if (this.state === State.run) {
       this.state = State.idle;
-      return;
     }
   }
 
   // Sets a flag in model which is tested in Animation loop
   const animStart = () => {
-    this.state = State.anim
-    this.animDone = false
     model.change = true;
     tstart = new Date().getTime();
     tpi = 0.0;
@@ -2120,30 +2118,24 @@ OR.Command = function (modele) {
 
   // Called from Orisim3d.js in Animation loop
   // This function changes geometry frame by frame
-  // Interpolators will help warp the timestep
   // return true if anim should continue false if anim should end
   const anim = () => {
     // We are in state anim
     t = new Date().getTime();
-
-    // If fast-forward, change the duration to 100
-    if (this.fastForward) duration = 100;
-
     // Compute tn varying from 0 to 1
     tn = (t - tstart - pauseDuration) / duration; // tn from 0 to 1
 
+    // tn = (t - tstart) / duration; // tn from 0 to 1
     if (tn > 1.0) { // Make sure tn is no greater than 1
       tn = 1.0;
     }
+    tni = context.interpolator(tn);   // Use the interpolator to scale tn
 
-    // Use the interpolator to scale tn
-    // Of course, if fast-foward we don't need this
-    tni = this.fastForward ? tn : context.interpolator(tn);   
 
     // Execute commands just after t xxx up to including ')'
     execute(this.currentCmd);
 
-    // Keep the interpolated t (tpi) preceding t now (tni)
+    // Keep t (tpi) preceding t now (tni)
     tpi = tni; // t preceding
 
     // If Animation is finished, set end values
@@ -2151,29 +2143,21 @@ OR.Command = function (modele) {
       tni = 1.0;
       tpi = 0.0;
 
-      // Raise the this flag!
-      this.animDone = true;
-
-      // Keep track of the model changes (might not work)
+      // console.log(model)
       let modelCopy = new OR.Model()
       modelCopy = deepCopy(model)
       stepModels.push(modelCopy)
 
-      // Reset fast-forward
-      this.fastForward = false;
-
       //  When there's a pause state update, pause upon completing the step
-      if (this.pauseRequest==true) {
-        this.state = State.pause
+      if (this.state === State.pause) {
         pauseStart = new Date().getTime();
-        this.pauseRequest = false; // We have completed the pause request
-        return false; // This will make model.change false and stop animation
+        return false;
       }
-      // else if (this.state !== State.anim) {
-      //   return false; // Same as above
-      // }
+      else if (this.state !== State.anim) {
+        return false;
+      }
 
-      // Switch back to run and launch next command
+      // Switch back to run and launch next cde
       this.state = State.run;
       commandLoop();
 
@@ -2186,7 +2170,7 @@ OR.Command = function (modele) {
       return false;
     }
 
-    // If animation not finished, continue animation
+    // Rewind to continue animation
     return true;
   }
 

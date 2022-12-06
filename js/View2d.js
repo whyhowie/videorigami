@@ -19,16 +19,17 @@ function View2d (model, canvas2d) {
   this.xOffset = 0;
   this.yOffset = 0;
 
+  // Aspect ratio
+  this.aspect = 1;
+
   // Resize canvas to fit model
   // .bind(this) used to call fit() with this view2d context
   var boundFit = fit.bind(this);
   boundFit();
 
-  // Mouse hit
-  this.canvas2d.addEventListener('mousedown', this.mouseDown);
-
+  
   // Point under mousedown
-  function mouseDown (ev) {
+  const mouseDown = (ev) => {
     // Event clic
     var rect = ev.target.getBoundingClientRect();
     var x    = ev.clientX - rect.left;
@@ -44,6 +45,9 @@ function View2d (model, canvas2d) {
     var xf = (x - xOffset) / scale;
     var yf = -(y - yOffset) / scale;
   }
+
+  // Mouse hit
+  this.canvas2d.addEventListener('mousedown', mouseDown);
 
   // Draw all points in blue
   function drawPoint () {
@@ -189,7 +193,8 @@ function View2d (model, canvas2d) {
 
     // <div> containing Canvas
     var viewWidth  = this.canvas2d.clientWidth;
-    var viewHeight = this.canvas2d.clientHeight;
+    // var viewHeight = this.canvas2d.clientHeight;
+    var viewHeight = viewWidth / this.aspect;
 
     // Resize canvas to fit <div>, should not be necessary but is
     this.canvas2d.width  = viewWidth;
