@@ -28,7 +28,7 @@ h1 {
   top: 0;
   left: 0vh;
   background-color: white;
-  box-shadow: 0 0 20px #eee;
+  box-shadow: 0 0 20px #aaa;
   padding: 10px;
   text-align: center;
 }
@@ -137,7 +137,7 @@ h1 {
 
 button {
   background-color: white;
-  border: 1px solid black;
+  border: 0px solid black;
   transition: 0.1s ease-in;
   box-shadow: 2px 2px 5px #aaa;
 }
@@ -166,7 +166,7 @@ button.normal {
 button.normal:hover {
   cursor: pointer;
   transform: scale(1.05);
-  transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in;
   background-color: #aaa;
   color: white;
   box-shadow: 2px 2px 5px #e5e;
@@ -286,7 +286,7 @@ button.running {
   /* height: 100vmin; */
   margin: 10px;
   padding: 10px;
-  border: 1px solid black;
+  border: 0px solid black;
   width: 250px;
   border-radius: 10px;
   box-shadow: 5px 5px 20px #aaa;
