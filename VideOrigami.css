@@ -1,5 +1,6 @@
 :root {
   --min-canvas-width: 370px;
+  --min-canvas-height: 460px;
   --canvas-height: 75vh;
   --canvas-border-radius: 10px;
   overflow-x: hidden;
@@ -71,6 +72,7 @@ h1 {
   left: 50%;
   width: 95%;
   min-width: var(--min-canvas-width);
+  min-height: var(--min-canvas-height);
   height: var(--canvas-height);
   transform: translate(-50%, 0);
   box-shadow: inset 0px 0px 20px #aaa;
@@ -83,6 +85,7 @@ h1 {
 #canvas3d-container {
   width: 95%;
   min-width: var(--min-canvas-width);
+  min-height: var(--min-canvas-height);
   height: var(--canvas-height);
   margin: auto;
   border: 1px solid #eee;
@@ -117,6 +120,7 @@ h1 {
 #canvas3d {
   width: 100%;
   min-width: var(--min-canvas-width);
+  min-height: var(--min-canvas-height);
   height: var(--canvas-height);
   left: 50%;
   top: 0;
@@ -255,20 +259,22 @@ button.running {
   position: relative;
   top: 40px;
   margin: 50px 0px 50px 0px;
-  scroll-snap-type: y proximity;
-  border-radius: var(--canvas-border-radius);
-  box-shadow: 5px 5px 20px #aaa;
+  box-shadow: 0px 0px 20px #aaa;
 }
 
 #video-container video {
-  margin-top: 2.5vmax;
+  margin-top: 5vmax;
   position: relative;
   width: 95%;
   height: auto;
+  transform-origin: top left;
+
   max-width: 800px;
   max-height: 1024px;
   border-radius: var(--canvas-border-radius);
 }
+
+
 
 #time-buttons {
   /* background-color: aqua; */
