@@ -124,8 +124,10 @@ h1 {
 
 /* Origami model control group */
 #controls-3d {
+  pointer-events: all;
+  /* Turn pointer events back on */
   position: relative;
-  top: -15vh;
+  top: 50vh;
   width: 90%;
   max-width: 1000px;
   padding-top: 1vh;
