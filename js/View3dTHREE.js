@@ -264,6 +264,8 @@ function View3d(modele, canvas3dElt) {
         // Without 'preserveDrawingBuffer' set to true, we must render now
         this.renderer.render(this.scene, this.camera);
         img.src = this.renderer.domElement.toDataURL();
+        // Just wanna make image centered 
+        w.document.body.style.textAlign = "center"
         w.document.body.appendChild(img); 
         break;
 
