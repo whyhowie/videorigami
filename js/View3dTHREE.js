@@ -240,10 +240,10 @@ function View3d(modele, canvas3dElt) {
   controls.enablePan = true;
   controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
   controls.dampingFactor = 0.1;
-  controls.screenSpacePanning = false;
+  controls.screenSpacePanning = true;
   controls.minDistance = 100;
   controls.maxDistance = 1400;
-  controls.maxPolarAngle = Math.PI / 2;
+  controls.maxPolarAngle = Math.PI;
 
   // Mouse, keyboard, and touch controls are available by default
 

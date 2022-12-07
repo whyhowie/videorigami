@@ -18,7 +18,7 @@ body {
 }
 
 h1 {
-  font-family: "Times New Roman", Times, serif;
+  font-family: "Georgia", "Times New Roman", Times, serif;
   font-size: 5vh;
   font-weight: 300;
 }
@@ -133,8 +133,9 @@ h1 {
   pointer-events: all;
   /* Turn pointer events back on */
   position: relative;
-  top: 50vh;
+  top: max(calc(100%*0.65 + 10px),var(--min-canvas-height)*0.618);
   width: 90%;
+  min-height: 70px;
   max-width: 1000px;
   height: 10vh;
   padding-top: 1vh;
@@ -148,7 +149,7 @@ h1 {
 
 button {
   background-color: white;
-  border: 0px solid black;
+  border: 1px solid black;
   transition: 0.1s ease-in;
   box-shadow: 2px 2px 5px #aaa;
 }
@@ -169,7 +170,8 @@ button.normal {
   margin: 10px;
   padding: 10px;
   width: 15vw;
-  height: 10vh;
+  height: 8vh;
+  min-height: 50px;
   max-width: 200px;
   max-height: 100px;
   border-radius: 800px;
@@ -223,8 +225,8 @@ button.running {
   left: 2vmin;
   width: 10vmin;
   height: 10vmin;
-  /* min-width: 80px;
-  min-height: 80px; */
+  min-width: 50px;
+  min-height: 50px;
   border-radius: 50%;
 }
 
@@ -305,7 +307,6 @@ button.running {
   /* height: 100vmin; */
   margin: 10px;
   padding: 10px;
-  border: 0px solid black;
   width: 250px;
   border-radius: 10px;
   box-shadow: 5px 5px 20px #aaa;
