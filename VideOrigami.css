@@ -2,15 +2,18 @@
   --min-canvas-width: 370px;
   --canvas-height: 75vh;
   --canvas-border-radius: 10px;
+  overflow-x: hidden;
+  width: 100%;
+  margin: auto; 
+  text-align: center;
 }
 
 body {
   width: 100%;
   min-width: 375px;
   text-align: center;
-  overflow-x: hidden;
   cursor: default;
-  margin: auto;
+  margin: auto; 
 }
 
 h1 {
@@ -21,13 +24,11 @@ h1 {
   
 
 #title-bar {
+  position: fixed;
   width: 100%;
   margin: auto;
   height: 10vh;
-  position: fixed;
   z-index: 20;
-  top: 0;
-  left: 0vh;
   background-color: white;
   box-shadow: 0 0 20px #aaa;
   padding: 10px;
