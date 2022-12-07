@@ -10,6 +10,7 @@ body {
   text-align: center;
   overflow-x: hidden;
   cursor: default;
+  margin: auto;
 }
 
 h1 {
@@ -130,6 +131,7 @@ h1 {
   top: 50vh;
   width: 90%;
   max-width: 1000px;
+  height: 10vh;
   padding-top: 1vh;
   margin: auto;
   display: flex;
@@ -248,20 +250,23 @@ button.running {
 } */
 
 #video-container {
+  width: 100%;
   position: relative;
   top: 40px;
   margin: 50px 0px 50px 0px;
   scroll-snap-type: y proximity;
+  border-radius: var(--canvas-border-radius);
   box-shadow: 5px 5px 20px #aaa;
 }
 
 #video-container video {
-  margin-top: 3vh;
+  margin-top: 2.5vmax;
   position: relative;
   width: 95%;
   height: auto;
   max-width: 800px;
   max-height: 1024px;
+  border-radius: var(--canvas-border-radius);
 }
 
 #time-buttons {
