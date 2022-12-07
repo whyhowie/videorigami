@@ -1,5 +1,7 @@
 const timeStamps = [...Array(12).keys()].map(x => x*0.5)
 
+
+
 let timeButtonsElement = document.getElementById('time-buttons')
 let buttonElements = []
 let videoElement = document.getElementById('video-demo')
@@ -67,7 +69,7 @@ function showProgress(event) {    // Scroll based on video progress
 
     // Scroll into view
     currentButtonElement.classList.add('current')
-    currentButtonElement.scrollIntoView({behavior: "smooth", block: "nearest", inline: "center"});
+    currentButtonElement.scrollIntoView({behavior: "auto", block: "nearest", inline: "center"});
 
     // Update progress value
     if (progressElement) {  // alternatively can use try...catch

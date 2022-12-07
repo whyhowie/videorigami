@@ -43,6 +43,8 @@ h1 {
   position: relative;
   top: 10vh;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -287,7 +289,7 @@ button.running {
   border: 1px solid black;
   width: 250px;
   border-radius: 10px;
-  box-shadow: 5px 5px 20px #eee;
+  box-shadow: 5px 5px 20px #aaa;
 
   transition: 0.3s ease-in-out;
 }
@@ -295,8 +297,9 @@ button.running {
 #time-buttons button:hover{
   cursor: pointer;
   background-color: #aaa;
-  box-shadow: 5px 5px 50px #eee;
+  box-shadow: 5px 5px 50px #aaa;
   transform: scale(1.1);
+  transition: 0.1s ease-in;
 }
 #time-buttons button:active{
   background-color: #8f8;
