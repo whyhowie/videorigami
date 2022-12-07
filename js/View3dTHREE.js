@@ -29,7 +29,7 @@ function View3d(modele, canvas3dElt) {
   
   //  Three: camera
   this.camera = new THREE.PerspectiveCamera(45, aspectRatio, 0.1, 20000);
-  this.camera.position.set(0, 0, 1000);
+  this.camera.position.set(0, 0, 800);
   this.camera.lookAt(0, 0, 0);
 
   //  Three: Scene
