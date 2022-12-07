@@ -128,11 +128,13 @@ h1 {
   top: -15vh;
   width: 90%;
   max-width: 1000px;
+  padding-top: 1vh;
   margin: auto;
   display: flex;
   align-items: center;
   flex-direction: row;
   justify-content: space-evenly;
+  border-top: 2px solid black;
 }
 
 button {
@@ -187,6 +189,7 @@ button.running {
   padding: 5px 10px;
   border-radius: 100px;
   transition: 0.1s ease-in;
+  text-align: center;
 }
 #controls-3d label:hover {
   cursor: pointer;
@@ -247,10 +250,11 @@ button.running {
   top: 40px;
   margin: 50px 0px 50px 0px;
   scroll-snap-type: y proximity;
+  box-shadow: 5px 5px 20px #aaa;
 }
 
 #video-container video {
-  margin-top: 20px;
+  margin-top: 3vh;
   position: relative;
   width: 95%;
   height: auto;
