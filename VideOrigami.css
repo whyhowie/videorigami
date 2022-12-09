@@ -268,7 +268,6 @@ button.running {
   margin-top: 5vmax;
   position: relative;
   width: 95%;
-  /* height: auto; */
   transform-origin: top left;
 
   max-width: 800px;

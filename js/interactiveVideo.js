@@ -1,5 +1,6 @@
-const timeStamps = [...Array(12).keys()].map(x => x*0.5)  // Test time stamps
-
+// const timeStamps = [...Array(12).keys()].map(x => x*0.5)  // Test time stamps
+const timeStamps = [1,220, 229, 234, 240, 250, 257, 262, 264, 274, 278,
+   282, 290, 295, 332, 344]
 
 // Step diagram buttons/cards
 let timeButtonsElement = document.getElementById('time-buttons')
@@ -14,17 +15,20 @@ let videoElement = document.getElementById('video-demo')
 var youTubeElement;
 function onYouTubeIframeAPIReady() {
   youTubeElement = new YT.Player('youtube-demo', {
+    height: 540,
     videoId: 'DsfUk8fjLeA',
     playerVars: {
       'playsinline': 1
     },
+    modestbranding: 1,
+    controls: 0,
     events: {
+      'onReady': showYouTubeProgress,
     }
   });
-  document.getElementsByTagName('iframe')[0].setAttribute("sandbox",
-    "allow-scripts allow-same-origin allow-presentation allow-popups allow-forms")
+  // document.getElementsByTagName('iframe')[0].setAttribute("sandbox",
+  //   "allow-scripts allow-same-origin allow-presentation allow-popups allow-forms")
 }
-
 
 
  // Progress bar
@@ -60,8 +64,10 @@ timeStamps.map( (t, idx) => {
 // Click on the button and jump to the specific second
 function jumpTo(event) {    // Jump to certain time of the video
     let startTimestamp = event.currentTarget.getAttribute("data-start")
-    console.log(startTimestamp)
+
     event.preventDefault();
+
+    event.target.scrollIntoView({behavior: "auto", block: "nearest", inline: "center"});
 
     if (videoElement) {
       videoElement.currentTime = startTimestamp;
@@ -81,35 +87,76 @@ function jumpTo(event) {    // Jump to certain time of the video
 }
 
 
-
+// For local video (please disable when YouTube video is used)
 function showProgress(event) {    // Scroll based on video progress
-    if (isNaN(event.target.duration))   // duration is NotaNumber at Beginning.
-      return;
-    currentProgress = event.target.currentTime / event.target.duration * 100   // Find the progress and set the state 
+  if (isNaN(event.target.duration)) {  // duration is NotaNumber at Beginning.
+    return
+  }
 
-    // Make previously highlighted active button inactive
-    timeStamps.map((_,idx) => {
-      buttonElements[idx].classList.remove('current')
-    })
-    
+  let currentButtonElement = findCurrentButtonElement()
 
-    // Find the new button to highlight
-    let currentTime = event.target.currentTime
-    let diffArr = timeStamps.map(timeStamp => Math.abs(currentTime - timeStamp));
-    let minNumber = Math.min(...diffArr);
-    let minNumberIndex = diffArr.findIndex(x => x === minNumber);
-    let currentButtonElement = buttonElements[minNumberIndex]
+  // Scroll the step card into view
+  currentButtonElement.classList.add('current')
+  currentButtonElement.scrollIntoView({behavior: "auto", block: "nearest", inline: "center"});
+
+  // Update progress value
+  currentProgress = event.target.currentTime / event.target.duration * 100   // Find the progress and set the state 
+  updateProgress(currentProgress)
+}
+
+
+// For YouTube video
+function showYouTubeProgress() {
+  const youTubeProgressListener = setInterval(() => {
+   
+    let currentButtonElement = findCurrentButtonElement()
 
     // Scroll the step card into view
     currentButtonElement.classList.add('current')
-    currentButtonElement.scrollIntoView({behavior: "auto", block: "nearest", inline: "center"});
 
-    // Update progress value
-    if (progressElement) {  // alternatively can use try...catch
-      progressElement.setAttribute("value", currentProgress)
-      progressTextElement.innerText = `${currentProgress.toFixed(2)}%`
+    let youTubeStatus = youTubeElement.getPlayerState;
+    if (youTubeStatus==1) { // If playing
+      currentButtonElement.scrollIntoView({behavior: "auto", block: "nearest", inline: "center"});
     }
+    
+    // Update progress value
+    currentProgress = youTubeElement.getCurrentTime() / youTubeElement.getDuration() * 100   // Find the progress and set the state 
+    updateProgress(currentProgress)
+  }, 100)
+}
+
+
+function findCurrentButtonElement() {
+  // Make previously highlighted active button inactive
+  timeStamps.map((_,idx) => {
+    buttonElements[idx].classList.remove('current')
+  })
+  
+
+  // Find the new button to highlight
+  let currentTime = youTubeElement.getCurrentTime()
+  let currentButtonIndex = 0
+  let _best = timeStamps[0] // The closest time in timeStamps to currenTime
+
+  for (var i=1; i<timeStamps.length; i++) {
+    if (timeStamps[i]<=currentTime && timeStamps[i]>_best) {
+      currentButtonIndex = i;
+      _best = timeStamps[i];
   }
+  }
+
+  let currentButtonElement = buttonElements[currentButtonIndex]
+
+  return currentButtonElement
+}
+
+
+function updateProgress(progVal) { // Update progress value
+  if (progressElement) {  // alternatively can use try...catch
+    progressElement.setAttribute("value", progVal)
+    progressTextElement.innerText = `${progVal.toFixed(2)}%`
+  }
+}
 
 
 

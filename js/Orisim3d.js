@@ -139,18 +139,6 @@ function setRunningListener() {
       continueButtonElt.classList.remove("running")
     }
   }, 100) // Runs every 100ms
-//   const runningListener = () => {
-//     if (OrigamiDemo.command.state == State.run || 
-//       OrigamiDemo.command.state == State.anim) {
-//       continueButtonElt.classList.add("running")
-//       return setTimeout(runningListener, 100);
-//     }
-//     // If state says not running
-//     continueButtonElt.classList.remove("running")
-//     return setTimeout(runningListener, 100); // every 100ms
-//   };
-//   runningListener();
-
 }
 
 
