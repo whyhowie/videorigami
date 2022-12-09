@@ -264,11 +264,11 @@ button.running {
   box-shadow: 0px 0px 20px #aaa;
 }
 
-#video-container video {
+#video-container video, iframe {
   margin-top: 5vmax;
   position: relative;
   width: 95%;
-  height: auto;
+  /* height: auto; */
   transform-origin: top left;
 
   max-width: 800px;

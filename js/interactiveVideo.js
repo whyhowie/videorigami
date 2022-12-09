@@ -1,10 +1,33 @@
-const timeStamps = [...Array(12).keys()].map(x => x*0.5)
+const timeStamps = [...Array(12).keys()].map(x => x*0.5)  // Test time stamps
 
 
-
+// Step diagram buttons/cards
 let timeButtonsElement = document.getElementById('time-buttons')
 let buttonElements = []
-let videoElement = document.getElementById('video-demo')
+
+// We use either local video or YouTube video
+let videoElement = document.getElementById('video-demo') 
+// let youtubeElement = document.getElementById('youtube-demo') 
+
+// This function creates an <iframe> (and YouTube player)
+// after the API code downloads.
+var youTubeElement;
+function onYouTubeIframeAPIReady() {
+  youTubeElement = new YT.Player('youtube-demo', {
+    videoId: 'DsfUk8fjLeA',
+    playerVars: {
+      'playsinline': 1
+    },
+    events: {
+    }
+  });
+  document.getElementsByTagName('iframe')[0].setAttribute("sandbox",
+    "allow-scripts allow-same-origin allow-presentation allow-popups allow-forms")
+}
+
+
+
+ // Progress bar
 let progressElement = document.getElementById('progress')
 let progressTextElement = document.createElement('p')
 let currentProgress = 0
@@ -38,12 +61,22 @@ timeStamps.map( (t, idx) => {
 function jumpTo(event) {    // Jump to certain time of the video
     let startTimestamp = event.currentTarget.getAttribute("data-start")
     console.log(startTimestamp)
-
     event.preventDefault();
-    videoElement.currentTime = startTimestamp;
 
-    // Play if playing; pause if paused
-    videoElement.paused ? videoElement.pause() : videoElement.play(); 
+    if (videoElement) {
+      videoElement.currentTime = startTimestamp;
+      // Play if playing; pause if paused
+      videoElement.paused ? videoElement.pause() : videoElement.play(); 
+    }
+
+    if (youTubeElement) {
+      let youTubeStatus = youTubeElement.getPlayerState;
+      youTubeElement.seekTo(startTimestamp);
+      if (youTubeStatus==2 || youTubeStatus==0) { // if paused (2) or ended (3) 
+        youTubeElement.pauseVideo()
+      }
+    }
+    
     
 }
 
@@ -67,7 +100,7 @@ function showProgress(event) {    // Scroll based on video progress
     let minNumberIndex = diffArr.findIndex(x => x === minNumber);
     let currentButtonElement = buttonElements[minNumberIndex]
 
-    // Scroll into view
+    // Scroll the step card into view
     currentButtonElement.classList.add('current')
     currentButtonElement.scrollIntoView({behavior: "auto", block: "nearest", inline: "center"});
 

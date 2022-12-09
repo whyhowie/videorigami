@@ -21,6 +21,10 @@
     }
   </script>
 
+  <script id="iframe-script" src="https://www.youtube.com/iframe_api">
+    // Add YouTube API
+  </script>
+
 </head>
 
 <body>
@@ -86,10 +90,16 @@
 
 
     <div id="video-container">
-      <video controls id="video-demo" ontimeupdate="showProgress(event)">
+      <!-- This is a test video -->
+      <!-- <video controls id="video-demo" ontimeupdate="showProgress(event)">
         <source src="assets/videos/catjam_blue.mp4"
           type="video/mp4" />
-      </video>
+      </video> -->
+
+      <!-- The real video from YouTube (using iframe API)-->
+      <div id="youtube-demo">
+      </div>
+
       <div id="gradient-container">
         <div id="time-buttons">
           <!-- Button elements -->

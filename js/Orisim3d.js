@@ -131,18 +131,26 @@ function continueAnim() {
 //  when commands are running
 function setRunningListener() {
   let continueButtonElt = window.document.getElementById("continue")
-  console.log(continueButtonElt)
-  const runningListener = () => {
+  const runningListener = setInterval(() => {
     if (OrigamiDemo.command.state == State.run || 
       OrigamiDemo.command.state == State.anim) {
       continueButtonElt.classList.add("running")
-      return setTimeout(runningListener, 100);
+    } else {
+      continueButtonElt.classList.remove("running")
     }
-    // If state says not running
-    continueButtonElt.classList.remove("running")
-    return setTimeout(runningListener, 100); // every 100ms
-  };
-  runningListener();
+  }, 100) // Runs every 100ms
+//   const runningListener = () => {
+//     if (OrigamiDemo.command.state == State.run || 
+//       OrigamiDemo.command.state == State.anim) {
+//       continueButtonElt.classList.add("running")
+//       return setTimeout(runningListener, 100);
+//     }
+//     // If state says not running
+//     continueButtonElt.classList.remove("running")
+//     return setTimeout(runningListener, 100); // every 100ms
+//   };
+//   runningListener();
+
 }
 
 
