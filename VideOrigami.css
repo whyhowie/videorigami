@@ -268,12 +268,14 @@ button.running {
   margin-top: 5vmax;
   position: relative;
   width: 95%;
+  height: auto;
   transform-origin: top left;
-
+  min-height: min(500px, 40vmax);
   max-width: 800px;
   max-height: 1024px;
   border-radius: var(--canvas-border-radius);
 }
+
 
 
 

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./Material.css">
   
   <title>VideOrigami</title>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 
   <script>
     // If screen too narrow, make it 375
@@ -99,7 +99,10 @@
       </video> -->
 
       <!-- The real video from YouTube (using iframe API)-->
-      <div id="youtube-demo">
+      <div id="iframe-container">
+        <!-- See the css file for auto height settings -->
+        <div id="youtube-demo" sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-forms">
+        </div>
       </div>
 
       <div id="gradient-container">

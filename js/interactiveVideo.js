@@ -15,7 +15,6 @@ let videoElement = document.getElementById('video-demo')
 var youTubeElement;
 function onYouTubeIframeAPIReady() {
   youTubeElement = new YT.Player('youtube-demo', {
-    height: 540,
     videoId: 'DsfUk8fjLeA',
     playerVars: {
       'playsinline': 1
