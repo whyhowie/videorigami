@@ -44,6 +44,7 @@
             <button id="screenshot" onclick="takeScreenshot()" class="normal" title="Take a screenshot!">
               <i class="material-icons">photo_camera</i>
             </button>
+            <h2>La Cocotte en Papier</h2>
           </div>
           
           <div id="controls-3d">
@@ -100,9 +101,12 @@
 
       <!-- The real video from YouTube (using iframe API)-->
       <div id="iframe-container">
-        <!-- See the css file for auto height settings -->
-        <div id="youtube-demo" sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-forms">
-        </div>
+        <!-- Have to define iframe here despite the javascript usage of the API -->
+        <!-- Otherwise there will be an error due to the sandbox. -->
+        <iframe id="youtube-demo" src="http://www.youtube.com/embed/DsfUk8fjLeA" title="YouTube video player"
+          sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-forms">
+        </iframe>
+
       </div>
 
       <div id="gradient-container">
@@ -131,7 +135,7 @@
 
   
 
-  <!-- Inlined models -->
+  <!-- Inline model -->
   <div id="cocotte.txt" type="not-javascript" hidden="true">
     // Cocotte
     d -200 200 -200 -200 200 -200 200 200

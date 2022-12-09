@@ -25,10 +25,8 @@ function onYouTubeIframeAPIReady() {
       'onReady': showYouTubeProgress,
     }
   });
-  // document.getElementsByTagName('iframe')[0].setAttribute("sandbox",
-  //   "allow-scripts allow-same-origin allow-presentation allow-popups allow-forms")
+  // document.getElementsByTagName('iframe')
 }
-
 
  // Progress bar
 let progressElement = document.getElementById('progress')
