@@ -23,9 +23,11 @@ function onYouTubeIframeAPIReady() {
     controls: 0,
     events: {
       'onReady': showYouTubeProgress,
-    }
+    },
+    sandbox: 'allow-presentation',
   });
-  // document.getElementsByTagName('iframe')
+  // document.getElementById("youtube-demo").setAttribute('sandbox',
+  // `allow-same-origin allow-scripts allow-forms allow-popups allow-presentation allow-popups-to-escape-sandbox allow-storage-access-by-user-activation`)
 }
 
  // Progress bar
