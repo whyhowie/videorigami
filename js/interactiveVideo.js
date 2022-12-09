@@ -42,8 +42,6 @@ if (progressElement) {
 }
 
 
-
-
 // Add the buttons
 timeStamps.map( (t, idx) => {
     let buttonElement = document.createElement("button")
